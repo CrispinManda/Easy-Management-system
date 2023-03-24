@@ -1,9 +1,10 @@
 <?php 
 /**
- * Template Name: Dashboard
+ * Template Name: Admin Project
 */
+get_header();?>
 
-//get_header();?>
+
 
 <style>
 		.homepage-heading {
@@ -62,17 +63,13 @@ a {
 	border-radius: 5px	;
 }
 	</style>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Profile Page Template</title>
+
+
+
     <link rel="stylesheet" href="wp-content/themes/wp_bootstrap5_theme/assets/css/front.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <style>
   
     .row.content {height: 550px}
@@ -134,7 +131,7 @@ ul.topnav li.right {float: right;}
     <div class="col-sm-3 col-md-2  sidenav hidden-xs">
   
       <ul class="nav nav-pills ">
-      <li class="active" ><a href="">Dashboard</a></li>
+      <li ><a href="">Dashboard</a></li>
       <li ><a href=""> <h5 class="my-5 text-center text-light">
                         <?php global $current_user; wp_get_current_user(); ?>
                         <?php 
@@ -145,11 +142,10 @@ ul.topnav li.right {float: right;}
                             } 
                         ?>
                     </h5></a></li>
-                    <!-- <li><a href="../../easyM/project"><ion-icon name="stats-chart" style="margin-right: 10px;font-size: 20px; "></ion-icon>Projects List</a></li> -->
-                   
-        <li><a href="../../easyM/profile/"><ion-icon name="person-outline" style="margin-right: 10px;font-size: 20px; "></ion-icon>Profile</a></li>
-        <li ><a href="../../easyM/users"><ion-icon name="people" style="margin-right: 10px;font-size: 20px;"></ion-icon>Users</a></li>
-        
+        <li class="active" ><a href="#section3">Project</a></li>
+     
+        <li ><a href="../../easyM/profile/">Profile</a></li>
+        <li><a href="../../easyM/users/">Users</a></li>
         
 
       </ul><br>
@@ -197,9 +193,7 @@ ul.topnav li.right {float: right;}
         <h4>Welcome to Easy Manage</h4>
        
 
-        <button style="background-color: #960018; width: 70px; border-radius: 5px;">
-  <a href="<?php echo wp_logout_url( home_url() ); ?>" style="color: white; text-decoration: none;">Logout</a>
-</button>
+         <a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a>
       </div> 
         
 <!-- <table class="table table-striped"></table> -->
@@ -268,8 +262,8 @@ endif;
                     <div class="m-5 card card-outline card-success">
                         <div class="card-header">
                             <div class="card-tools d-flex mb-2">
-                                <!-- <h5 class="text-center text-primary mt-2 flex-grow-1">Complete the Projects Listed</h5> -->
-                                <!-- <a class=" ms-auto btn btn-primary" href="../completed-projects"> Completed Projects</a> -->
+                                <h5 class="text-center text-primary mt-2 flex-grow-1">Complete the Projects Listed</h5>
+                                <a class=" ms-auto btn btn-primary" href="../completed-projects"> Completed Projects</a>
                             </div>
                             <div class="alert alert-warning alert-dismissible text-center" <?php if ($project_status == 'In Progress' || $project_status == 'Completed'  || $project_status == '') { echo'style="display:none;"'; } ?> role="alert">
                                 <strong>Warning!</strong> Once a project has been accepted it cannot be retracted.
@@ -279,7 +273,6 @@ endif;
                             </div>
                             <div class="alert alert-success alert-dismissible text-center" <?php if ($project_status == 'In Progress' || $project_status == 'Pending'  || $project_status == '') { echo'style="display:none;"'; } ?>  role="alert">
                                 <strong>Congratulations!</strong> You have completed the project.
-                                
                             </div>
                         </div>
                         <div class="card-body">
@@ -301,7 +294,7 @@ endif;
                                         <th>Description</th>
                                         <th>Project Started</th>
                                         <th>Project Due Date</th>
-                                        <th>Project</th>
+                                        <th>Project Status</th>
                                         <th>React</th>
                                         <th>Action</th>
                                     </tr>
@@ -361,7 +354,7 @@ endif;
                                                 <form action="" method="post">
                                                     <input type="hidden" name="meta-field" value="In Progress">
                                                     <input type="hidden" name="post-id" value="<?php echo get_the_ID(); ?>">                      
-                                                    <button class="btn btn-success"type="submit" name="accepted" <?php if ($project_status == 'In Progress' || $project_status == 'Completed') { echo'disabled'; } ?> >Accept</button>
+                                                    <button class="btn btn-primary"type="submit" name="accepted" <?php if ($project_status == 'In Progress' || $project_status == 'Completed') { echo'disabled'; } ?> >Accept</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -371,19 +364,6 @@ endif;
                                                     <input type="hidden" name="meta-field2" value="Completed">
                                                     <input type="hidden" name="project-id" value="<?php echo get_the_ID(); ?>">
                                                     <button class="btn btn-primary"type="submit" name="completed" <?php if ($project_status == 'Completed') { echo'disabled'; } ?>>Completed</button>
-                                                    <?php // Get the user's email address
-$user_email = get_userdata($project_user_id )->user_email;
-
-// Define the email subject and message body
-$subject = 'You have been assigned a new project';
-$message = 'Dear ' . get_userdata($project_user_id )->display_name . ',\r\n\r\n';
-$message .= 'You have been assigned a new project. Please log in to Easy-Manage to view the details.\r\n\r\n';
-$message .= 'Best regards,\r\n';
-$message .= 'The Easy-Manage team';
-
-// Call the wp_mail() function to send the email
-wp_mail( $user_email, $subject, $message );
-?>
                                                 </form>
                                             </div>                       
                                         </td>
@@ -407,4 +387,5 @@ wp_mail( $user_email, $subject, $message );
     
 
 ?>
+
 

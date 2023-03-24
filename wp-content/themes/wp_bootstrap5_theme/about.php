@@ -78,9 +78,9 @@ a {
             </div>
             
         </div>
-        <div class="login">
+        <!-- <div class="login">
         <a role="button" class="btns" href="/wp/vanced/register/">Register</a>          
-        </div>
+        </div> -->
     </div>
 
 <section id="ABOUT">

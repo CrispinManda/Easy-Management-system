@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Dashboard
+ * Template Name: project list
  */
 get_header();
 ?>
@@ -64,7 +64,6 @@ a {
 
 
 
-<head>
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,6 +75,7 @@ a {
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
   <style>
   
     .row.content {height: 550px}
@@ -148,11 +148,10 @@ ul.topnav li.right {float: right;}
                         ?>
                     </h4></a></li>
                     <li ><a href="../../easyM/users"><ion-icon name="people" style="margin-right: 10px;font-size: 20px;"></ion-icon>Users</a></li>
-        <li><a href="../../easyM/profile/"><ion-icon name="person-outline" style="margin-right: 10px;font-size: 20px; "></ion-icon>Profile</a></li>
-        <li><a href="../../easyM/project"><ion-icon name="stats-chart" style="margin-right: 10px;font-size: 20px; "></ion-icon>Projects List</a></li>
+        <li ><a href="../../easyM/profile/"><ion-icon name="person-outline" style="margin-right: 10px;font-size: 20px; "></ion-icon>Profile</a></li>
+        <li class="active"><a href="../../easyM/project"><ion-icon name="stats-chart" style="margin-right: 10px;font-size: 20px; "></ion-icon>Projects List</a></li>
         <li><a href="../../easyM/google-map"><ion-icon name="navigate" style="margin-right: 10px;font-size: 20px; "></ion-icon>User Location</a></li>
         <li><a href="#section3"><ion-icon name="settings" style="margin-right: 10px;font-size: 20px; "></ion-icon>Account Settings</a></li>
-       
        
       </ul><br>
     </div>
@@ -225,117 +224,134 @@ ul.topnav li.right {float: right;}
   </div> 
 
   <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Username</th>
-        <th scope="col">Email</th>
-        <th scope="col">Status</th>
-        <th scope="col">Date</th>
-        <th scope="col">Operations</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      $args = array(
-          'orderby' => 'ID',
-          'order' => 'ASC',
-      );
+  <thead>
+<tr>
+<th scope = 'col'>Project Title</th>
+<th scope = 'col'>Description</th>
+<th scope = 'col'>Start date</th>
+<th scope = 'col'>Due date</th>
+<th scope = 'col'>Status</th>
+<th scope = 'col'>User Assigned</th>
+<th scope = 'col'>Actions</th>
+</tr>
+</thead>
+<?php
+// The Query
+$query = new WP_Query(array( 'post_type' => 'project' ));
+query_posts($query);
 
-      if(isset($_GET['search'])){
-        $search_text = $_GET['search'];
-        $args['search'] = '*'.$search_text.'*';
-      }
+// The Loop
+if ($query->have_posts()):
+    while ($query->have_posts()) :
+        $query->the_post();
 
-      $users = get_users($args);
-      $users = get_users(array('role__in' => array('developer')));
-      foreach ($users as $user) { 
-        $user_id = $user->ID;
-        $registration_status = get_user_meta($user_id, 'registration_status', true);
-        // only show active and pending users
-      ?>
-        <tr>
-          <td>
-            <?php echo $user_id; ?>
-          </td>
-          <td>
-            <?php echo $user->display_name; ?>
-          </td>
-          <td>
-            <?php echo $user->user_email; ?>
-          </td>
-          <td>
-            <span 
-              <?php if ($registration_status == 'pending') {
-                  echo 'class="badge bg-danger"';
-              } elseif ($registration_status == 'active' || $registration_status == 'Completed') {
-                  echo 'class="badge text-bg-success"';
-              } else {
-                  echo 'class="badge text-bg-warning"';
-              } ?>
-            ><?php echo esc_html($registration_status); ?>
-            </span>
-          </td>
-          <td>
-            <?php echo '<span>' . esc_html(date("d-m-Y", strtotime($user->user_registered))) . '</span>'; ?>
-          </td>
-          <td>
-            <div class="flex align-items-center list-user-action">
-              <form action="" method="post">
-               <?php  if($registration_status == "pending"|| $registration_status == "inactive" ){?>
-                <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-                <button class="btn btn-success" type="submit" name="activate_user">Activate</button>
-                <?php }?>
-                <?php if ($registration_status == 'active') { ?>
-                  <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-                  <button class="btn btn-danger" type="submit" name="deactivate_user">Deactivate</button>
-                <?php }?>
-                
+        // your post content ( title, excerpt, thumb.... )
+        // $project_desc = get_post_meta(get_the_ID(), 'project_desc', true);
+        $project_start = get_post_meta(get_the_ID(), 'project_start', true);
+        $project_end = get_post_meta(get_the_ID(), 'project_end', true);
+        $project_status = get_post_meta(get_the_ID(), 'project_status_select', true);
+
+        $project_user_id = get_post_meta(get_the_ID(), 'project_user', true);
+
+        $project_user = '';
+        if ($project_user_id) {
+            $user_info = get_userdata($project_user_id);
+            if ($user_info) {
+                $project_user = $user_info->display_name;
+            }
+        }
+
+        ?>
+<tbody>
+<tr>
+<td>
+<p><b><?php the_title();
+        ?></b></p>
+</td>
+<td>
+<b><?php the_content();
+        ?></b>
+<p class = 'truncate'></p>
+</td>
+<td><b><?php echo esc_attr($project_start) ;
+        ?></b></td>
+<td>
+<b><?php echo esc_attr($project_end) ;
+        ?></b>
+</td>
+<td>
+<span <?php if ($project_status == 'Pending') {
+    echo'class="badge text-bg-danger"';
+}
+        ?> <?php if ($project_status == 'In Progress') {
+            echo'class="badge text-bg-primary"';
+        }
+        ?> <?php if ($project_status == 'Completed') {
+            echo'class="badge text-bg-success"';
+        }
+        ?> >
+<?php echo esc_attr($project_status) ;
+        ?>
+</span>
+</td>
+<td>
+<span class = ''><?php echo esc_attr($project_user) ;
+        ?></span>
+</td>
+<td>
+<div class = 'mt-2 d-flex gap-1' >
+<!-- <a href="../updates/?post_id=<?php //echo get_the_ID(); ?>"><input class="btn btn-primary"type="button" value="Edit"></a> -->
+<form action = '' method = 'post'>
+<input type = 'hidden' name = 'meta-field' value = "<?php echo get_post_meta(get_the_ID(), 'project_user', true); ?>">
+<input type = 'hidden' name = 'post-id' value = '<?php 
+if ($project_status == 'Completed' ) {
+   echo get_the_ID();;
+}else{
+    echo $alert_message;
+}  ?>'>
+<button class="btn btn-primary" type="submit" name="delete_post">Del</button>
+
+<style>
+  .btn-primary {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+}
+
+.btn-primary:hover {
+  background-color: red;
+
+  
+}
+
+.badge.text-bg-danger {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  height:25px;
+  
+}
+
+
+</style>
 </form>
 </div>
 </td>
 </tr>
-<?php }?>
 </tbody>
+<?php
+    endwhile;
+    //Reset Query
+    wp_reset_query();
+endif;
+?>
+    
 
   </table>
 </div>
-<?php
-// If user clicked activate user button
-if (isset($_POST['activate_user'])) {
-  $user_id = $_POST['user_id'];
-  update_user_meta($user_id, 'registration_status', 'active');
-}
-
-// If user clicked deactivate user button
-if (isset($_POST['deactivate_user'])) {
-  $user_id = $_POST['user_id'];
-  update_user_meta($user_id, 'registration_status', 'inactive');
-}
-
-
-?>
-
-
-<?php
-$users = get_users(array('role__in' => array('developer')));
-
-if (isset($_POST['activate_user']) && isset($_POST['user_id'])) {
-    $user_id = intval($_POST['user_id']);
-    update_user_meta($user_id, 'registration_status', 'active');
-    echo '<div class="alert alert-success">User activated successfully.</div>';
-}
-?>
-<?php
-$users = get_users(array('role__in' => array('developer')));
-
-if (isset($_POST['deactivate_user']) && isset($_POST['user_id'])) {
-    $user_id = intval($_POST['user_id']);
-    update_user_meta($user_id, 'registration_status', 'inactive');
-    echo '<div class="alert alert-success">User deactivated successfully.</div>';
-}
-?>
-<!-- mmmmmmmmmmm -->
 
 
 
@@ -344,9 +360,3 @@ if (isset($_POST['deactivate_user']) && isset($_POST['user_id'])) {
 
 
 
-
-<?php
-
- //get_footer();
-
-?>

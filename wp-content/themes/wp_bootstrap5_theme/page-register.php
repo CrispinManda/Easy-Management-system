@@ -109,10 +109,11 @@ if(isset($_POST['signup'])){
         
 
         $data = array(
+          
             'user_login'           =>  $user_login, // the user's login username.
             'user_email'           =>  $user_email, //enter email
             'user_pass'	           =>  $user_pass, // not necessary to hash password ( The plain-text user password ).
-            'role'                 =>  'member', //give role of member
+            'role'                 =>  'developer', //give role of member
             'show_admin_bar_front' =>  false, // display the Admin Bar for the user 'true' or 'false'
             'user_status'          =>  0, // set the user as inactive
             'meta_input' => array(
@@ -126,7 +127,7 @@ if(isset($_POST['signup'])){
         if ( ! is_wp_error( $user_id ) ) {
             
             $success_message  = '<div class="alert alert-success alert-dismissible fade show" role="alert">';
-            $success_message .= 'User '. $user_id. ' has been successfully registered.';
+            $success_message .= 'Congratulations!'  . $user_login. ' You have been successfully registered.';
             $success_message .= '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
             $success_message .= '</div>';
 

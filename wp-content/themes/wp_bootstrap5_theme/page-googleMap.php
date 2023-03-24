@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Map
+ * Template Name: Dashboard
  */
 get_header();
 ?>
@@ -65,10 +65,17 @@ a {
 
 
 <head>
-<link rel="stylesheet" href="wp-content/themes/wp_bootstrap5_theme/assets/css/front.css">
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Profile Page Template</title>
+    <link rel="stylesheet" href="wp-content/themes/wp_bootstrap5_theme/assets/css/front.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <style>
   
     .row.content {height: 550px}
@@ -125,8 +132,8 @@ ul.topnav li.right {float: right;}
 </style>
 
 
-< class="container-fluid">
-  < class="row content">
+<div class="container-fluid">
+  <div class="row content">
     <div class="col-sm-3 col-md-2  sidenav hidden-xs">
   
       <ul class="nav nav-pills ">
@@ -140,10 +147,11 @@ ul.topnav li.right {float: right;}
                             } 
                         ?>
                     </h4></a></li>
-        <li><a href="../../easyM/profile/">Profile</a></li>
-        <li ><a href="../../easyM/project/">Projects List</a></li>
-        <li><a href="#section3">Edit Project</a></li>
-        <li><a href="#section3">Account Settings</a></li>
+                    <li ><a href="../../easyM/users"><ion-icon name="people" style="margin-right: 10px;font-size: 20px;"></ion-icon>Users</a></li>
+        <li><a href="../../easyM/profile/"><ion-icon name="person-outline" style="margin-right: 10px;font-size: 20px; "></ion-icon>Profile</a></li>
+        <li><a href="../../easyM/project"><ion-icon name="stats-chart" style="margin-right: 10px;font-size: 20px; "></ion-icon>Projects List</a></li>
+        <li class="active"><a href="../../easyM/google-map"><ion-icon name="navigate" style="margin-right: 10px;font-size: 20px; "></ion-icon>User Location</a></li>
+        <li><a href="#section3"><ion-icon name="settings" style="margin-right: 10px;font-size: 20px; "></ion-icon>Account Settings</a></li>
        
       </ul><br>
     </div>
@@ -197,7 +205,7 @@ ul.topnav li.right {float: right;}
         
  
     </style>
-   < class="col-sm-9 col-md-10">
+   <div class="col-sm-9 col-md-10">
   <div class="well" id="well" style='background-color: #37362A; color:white;'>
     <h4>Welcome to Easy Manage</h4>
     <a href="../../easyM/create-project/">
@@ -212,57 +220,62 @@ ul.topnav li.right {float: right;}
     <button style="background-color: #960018; width: 70px; border-radius: 5px;">
   <a href="<?php echo wp_logout_url( home_url() ); ?>" style="color: white; text-decoration: none;">Logout</a>
 </button>
+</div>
 
-  </div> 
-
-  <div class="container">
-  <!DOCTYPE html>
-<html>
-  <head>
-    <title>Google Map Example</title>
-    <style>
-      #map {
-        height: 400px;
-        width: 100%;
-      }
-    </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-    <script>
-      function initMap() {
-        // Create a new map centered on a specific location
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 37.7749, lng: -122.4194},
-          zoom: 10
-        });
-        
-        // Add a marker to the map
-        var marker = new google.maps.Marker({
-          position: {lat: 37.7749, lng: -122.4194},
-          map: map,
-          title: 'San Francisco'
-        });
-      }
-    </script>
-  </head>
-  <body>
-    <h1>Google Map Example</h1>
-    <div id="map"></div>
-    <script>
-      // Call the initMap function to initialize the map
-      initMap();
-    </script>
-  </body>
-</html>
-
-   
+<div class="container">
+<body>   
+       <h2>Click to View Location in the Map </h2>   
+        <button style ="background-color:green;Color:white;" onclick="getlocation();"> Show Position</button>   
+        <div id="demo" style="width: 600px; height: 400px; margin-left: 200px;"></div>   
+         
+        <script src="https://maps.google.com/maps/api/js?sensor=false"> </script>   
+          
+        <script type="text/javascript">   
+        function getlocation(){   
+            if(navigator.geolocation){   
+                navigator.geolocation.getCurrentPosition(showPos, showErr);   
+            }  
+            else{  
+                alert("Sorry! your Browser does not support Geolocation API")  
+            }  
+        }   
+        //Showing Current Poistion on Google Map  
+        function showPos(position){   
+            latt = position.coords.latitude;   
+            long = position.coords.longitude;   
+            var lattlong = new google.maps.LatLng(latt, long);   
+            var myOptions = {   
+                center: lattlong,   
+                zoom: 15,   
+                mapTypeControl: true,   
+                navigationControlOptions: {style:google.maps.NavigationControlStyle.SMALL}   
+            }   
+            var maps = new google.maps.Map(document.getElementById("demo"), myOptions);   
+            var markers =   
+            new google.maps.Marker({position:lattlong, map:maps, title:"You are here!"});   
+        }   
   
-    </div>
+        //Handling Error and Rejection  
+             function showErr(error) {  
+              switch(error.code){  
+              case error.PERMISSION_DENIED:  
+             alert("User denied the request for Geolocation API.");  
+              break;  
+             case error.POSITION_UNAVAILABLE:  
+             alert("USer location information is unavailable.");  
+            break;  
+            case error.TIMEOUT:  
+            alert("The request to get user location timed out.");  
+            break;  
+           case error.UNKNOWN_ERROR:  
+            alert("An unknown error occurred.");  
+            break;  
+           }  
+        }        </script>   
+    </body>   
+</div>
 
 
-  
-    
-    
-   
 
 
 
@@ -270,7 +283,8 @@ ul.topnav li.right {float: right;}
 
 
 
+<?php
 
+ //get_footer();
 
-
-
+?>

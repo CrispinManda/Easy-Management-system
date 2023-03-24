@@ -137,17 +137,57 @@ Call or Visit us Today.</p>
             </div>
 
             <div class="input_container">
-                <form action="#">
-                    <div class="row">
-                        <input type="text" name="" id="" class="form_control" placeholder="Your Name" required>
-                        <input type="email" name="" id="" class="form_control" placeholder="Email Address" required>
-                    </div>
+            <form method="post">
+  <!-- 2 column grid layout with text inputs for the first and last names -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example1">First name</label>
+        <input type="text" id="name" name="firstname" class="form-control"  placeholder="input your First Name..." />
+        
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example2">Last name</label>
+        <input type="text" id="name" name="secondname" class="form-control"  placeholder="input your second Name..." />
+        
+      </div>
+    </div>
+  </div>
 
-                    <input type="text" name="" id="" placeholder="Subject" class="form_control" required>
-                    <textarea name="" id="" cols="30" rows="7" class="form_control" placeholder="Message" required></textarea>
+  <!-- Email input -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example1">Email</label>
+        <input type="text" id="useremail" name="email" class="form-control" placeholder="input your email..."/>
+        
+      </div>
+    </div>
 
-                    <div class="btn"><button type="submit">Send Message</button></div>
-                </form>
+    <!--Telephone -->
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example2">Telephone Number</label>
+        <input type="text" name="telephone" id="tel" class="form-control"  placeholder="input your telephone number..." />
+       
+      </div>
+    </div>
+  </div>
+
+
+   <!-- Message input -->
+   <div class="form-outline mb-4">
+   <label class="form-label" for="form4Example3"  placeholder="input your message...">Message</label>
+    <textarea class="form-control" name="message" id="message" rows="4"></textarea>
+   
+  </div>
+  <!-- Submit button -->
+  <button type="submit" name="submitbtn" class="btn btn-primary btn-block mb-4">Send</button>
+
+ 
+</form>
             </div>
         </div>
     </section>

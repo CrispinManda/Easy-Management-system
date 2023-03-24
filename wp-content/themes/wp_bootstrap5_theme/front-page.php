@@ -13,7 +13,11 @@
   <li><a  href="/easyM/">HOME</a></li>
   <li><a href="/easyM/about/">ABOUT</a></li>
   <li><a href="/easyM/contact/">CONTACT</a></li>
-  <li><a href="/easyM/wp-login.php">LOGIN</a></li>
+  <li>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="window.location.href='/easyM/hidden/'">LOGIN</button>
+</li>
+
+  
 
 </ul>
 <div class="bgimage" >
@@ -41,6 +45,12 @@ body{
   padding:0;
   box-sizing:border-box;
   background-color: white;
+}
+li button{
+    margin-top:20px;
+}
+li .button{
+    background-color:green;
 }
     
 
@@ -126,17 +136,57 @@ body{
             </div>
 
             <div class="input_container">
-                <form action="#">
-                    <div class="row">
-                        <input type="text" name="" id="" class="form_control" placeholder="Your Name" required>
-                        <input type="email" name="" id="" class="form_control" placeholder="Email Address" required>
-                    </div>
+            <form method="post">
+  <!-- 2 column grid layout with text inputs for the first and last names -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example1">First name</label>
+        <input type="text" id="name" name="firstname" class="form-control"/>
+        
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example2">Last name</label>
+        <input type="text" id="name" name="secondname" class="form-control"/>
+        
+      </div>
+    </div>
+  </div>
 
-                    <input type="text" name="" id="" placeholder="Subject" class="form_control" required>
-                    <textarea name="" id="" cols="30" rows="7" class="form_control" placeholder="Message" required></textarea>
+  <!-- Email input -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example1">Email</label>
+        <input type="text" id="useremail" name="email" class="form-control"/>
+        
+      </div>
+    </div>
 
-                    <div class="btn"><button type="submit">Send Message</button></div>
-                </form>
+    <!--Telephone -->
+    <div class="col">
+      <div class="form-outline">
+      <label class="form-label" for="form3Example2">Telephone Number</label>
+        <input type="text" name="telephone" id="tel" class="form-control" />
+       
+      </div>
+    </div>
+  </div>
+
+
+   <!-- Message input -->
+   <div class="form-outline mb-4">
+   <label class="form-label" for="form4Example3">Message</label>
+    <textarea class="form-control" name="message" id="message" rows="4"></textarea>
+   
+  </div>
+  <!-- Submit button -->
+  <button type="submit" name="submitbtn" class="btn btn-primary btn-block mb-4">Send</button>
+
+ 
+</form>
             </div>
         </div>
     </section>
@@ -182,11 +232,6 @@ section .header{
     background:  #222F77;
     margin: auto;
 }
-.slogan{
-    /* background-color: #222F77; */
-    text-align:center;
-    align-items:center;
-}
 
 .header p{
     margin-bottom: 0;
@@ -207,14 +252,14 @@ section .header{
     padding: 20px;
     max-width: 35%;
     width: 100%;
-    background-color:#ECEAE8;
+    background: #008072;
     border-radius: 10px 0 0 10px;
-    color: black;
+    color: #fff;
 }
 
 .info_container .info_item{
     padding: 20px;
-    /* background:  #222F77; */
+    background:  #222F77;
     border-radius: 10px;
     margin-bottom: 20px;
 }
@@ -312,8 +357,7 @@ textarea{
 }
 
 .btn button:hover{
-    background: #10A54BC9;
-
+    background: #019e8b;
 }
 
 @media screen and (max-width: 1400px) {
@@ -365,7 +409,6 @@ textarea{
     }
 }
     </style>
-
 
 
 

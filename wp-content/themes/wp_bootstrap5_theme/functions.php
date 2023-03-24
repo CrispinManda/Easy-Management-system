@@ -114,73 +114,73 @@ add_action('save_post', 'recent_posts_transient');
 /*-------------------------------------------------------------------------*/
 /*                        LIMIT LOGIN ATTEMPTS                             */
 /*-------------------------------------------------------------------------*/
-function check_attempted_login( $user, $username, $password ) {
-    if ( get_transient( 'attempted_login' ) ) {
-        $datas = get_transient( 'attempted_login' );
+// function check_attempted_login( $user, $username, $password ) {
+//     if ( get_transient( 'attempted_login' ) ) {
+//         $datas = get_transient( 'attempted_login' );
 
-        if ( $datas['tried'] >= 3 ) {
-            $until = get_option( '_transient_timeout_' . 'attempted_login' );
-            $time = time_to_go( $until );
+//         if ( $datas['tried'] >= 3 ) {
+//             $until = get_option( '_transient_timeout_' . 'attempted_login' );
+//             $time = time_to_go( $until );
 
-            return new WP_Error( 'too_many_tried',  sprintf( __( '<strong>ERROR</strong>: You have reached authentication limit, you will be able to try again in %1$s.' ) , $time ) );
-        }
-    }
+//             return new WP_Error( 'too_many_tried',  sprintf( __( '<strong>ERROR</strong>: You have reached authentication limit, you will be able to try again in %1$s.' ) , $time ) );
+//         }
+//     }
 
-    return $user;
-}
+//     return $user;
+// }
 
-add_filter( 'authenticate', 'check_attempted_login', 30, 3 ); 
+// add_filter( 'authenticate', 'check_attempted_login', 30, 3 ); 
 
-function login_failed( $username ) {
-    if ( get_transient( 'attempted_login' ) ) {
-        $datas = get_transient( 'attempted_login' );
-        $datas['tried']++;
+// function login_failed( $username ) {
+//     if ( get_transient( 'attempted_login' ) ) {
+//         $datas = get_transient( 'attempted_login' );
+//         $datas['tried']++;
 
-        if ( $datas['tried'] <= 3 )
-            set_transient( 'attempted_login', $datas , 300 );
-    } else {
-        $datas = array(
-            'tried'     => 1
-        );
-        set_transient( 'attempted_login', $datas , 300 );
-    }
-}
+//         if ( $datas['tried'] <= 3 )
+//             set_transient( 'attempted_login', $datas , 300 );
+//     } else {
+//         $datas = array(
+//             'tried'     => 1
+//         );
+//         set_transient( 'attempted_login', $datas , 300 );
+//     }
+// }
 
-add_action( 'wp_login_failed', 'login_failed', 10, 1 ); 
+// add_action( 'wp_login_failed', 'login_failed', 10, 1 ); 
 
-function time_to_go($timestamp){
+// function time_to_go($timestamp){
 
-    // converting the mysql timestamp to php time
-    $periods = array(
-        "second",
-        "minute",
-        "hour",
-        "day",
-        "week",
-        "month",
-        "year"
-    );
-    $lengths = array(
-        "60",
-        "60",
-        "24",
-        "7",
-        "4.35",
-        "12"
-    );
-    $current_timestamp = time();
-    $difference = abs($current_timestamp - $timestamp);
-    for ($i = 0; $difference >= $lengths[$i] && $i < count($lengths) - 1; $i ++) {
-        $difference /= $lengths[$i];
-    }
-    $difference = round($difference);
-    if (isset($difference)) {
-        if ($difference != 1)
-            $periods[$i] .= "s";
-            $output = "$difference $periods[$i]";
-            return $output;
-    }
-}
+//     // converting the mysql timestamp to php time
+//     $periods = array(
+//         "second",
+//         "minute",
+//         "hour",
+//         "day",
+//         "week",
+//         "month",
+//         "year"
+//     );
+//     $lengths = array(
+//         "60",
+//         "60",
+//         "24",
+//         "7",
+//         "4.35",
+//         "12"
+//     );
+//     $current_timestamp = time();
+//     $difference = abs($current_timestamp - $timestamp);
+//     for ($i = 0; $difference >= $lengths[$i] && $i < count($lengths) - 1; $i ++) {
+//         $difference /= $lengths[$i];
+//     }
+//     $difference = round($difference);
+//     if (isset($difference)) {
+//         if ($difference != 1)
+//             $periods[$i] .= "s";
+//             $output = "$difference $periods[$i]";
+//             return $output;
+//     }
+// }
 /*-------------------------------------------------------------------------*/
 /*             SHOW DIFFERENT DASHBOARD DEPENDING ON USER                  */
 /*-------------------------------------------------------------------------*/
@@ -188,19 +188,18 @@ function dashboard_page_template($template) {
     if(!is_user_logged_in()) return $template;
   
     $current_page = get_queried_object();
-    $current_user = wp_get_current_user();
-    if($current_page->post_name === 'dashboard') { // modify only if the current page is 'dashboard'
+    if($current_page && $current_page->post_name === 'dashboard') { // modify only if the current page is 'dashboard'
         $new_template = '';
         $current_user = wp_get_current_user();
         $user = new WP_User( $current_user->ID);
 
-        if(in_array('project_manager', $user->roles) || in_array('root', $user->roles)){
+        if(in_array('project_manager', $user->roles) || in_array('administrator', $user->roles)){
             $new_template = locate_template( array( 'dashboard-pm.php' ) );
         }
         elseif(in_array('developer', $user->roles)){
             $new_template = locate_template( array( 'dashboard-d.php' ) );
         }else{
-            $new_template = locate_template( array( 'landing-page.php' ) );
+            $new_template = locate_template( array( 'front-page.php' ) );
         }
         if ( '' != $new_template ) {
             $template = $new_template;
@@ -209,5 +208,249 @@ function dashboard_page_template($template) {
     return $template;
 }
 add_filter( 'template_include', 'dashboard_page_template' );
+
+
+// function developers_page_template($template) {
+//     if(!is_user_logged_in()) return $template;
+  
+//     $current_page = get_queried_object();
+//     if($current_page && $post_name == 'developer') { 
+//         $new_template = '';
+//         $current_user = wp_get_current_user();
+//         $user = new WP_User( $current_user->ID);
+
+//         if(in_array('project_manager', $user->roles) || in_array('administrator', $user->roles)){
+//             $new_template = locate_template( array( 'page-employees.php' ) );
+//         }
+//         elseif(in_array('developer', $user->roles)){
+//             $new_template = locate_template( array( 'page-other-employees.php' ) );
+//         }else{
+//             $new_template = locate_template( array( 'front-page.php' ) );
+//         }
+//         if ( '' != $new_template ) {
+//             $template = $new_template;
+//         }
+//     }
+//     return $template;
+// }
+// add_filter( 'template_include', 'developers_page_template' );
+
+
+// function projects_page_template($template) {
+//     if(!is_user_logged_in()) return $template;
+  
+//     $current_page = get_queried_object();
+//     if($current_page && $post_name === 'projects') { 
+//         $new_template = '';
+//         $current_user = wp_get_current_user();
+//         $user = new WP_User( $current_user->ID);
+
+//         if(in_array('project_manager', $user->roles) || in_array('administrator', $user->roles)){
+//             $new_template = locate_template( array( 'page-projects.php' ) );
+//         }
+//         elseif(in_array('developer', $user->roles)){
+//             $new_template = locate_template( array( 'page-project-users.php' ) );
+//         }else{
+//             $new_template = locate_template( array( 'front-page.php' ) );
+//         }
+//         if ( '' != $new_template ) {
+//             $template = $new_template;
+//         }
+//     }
+//     return $template;
+// }
+// add_filter( 'template_include', 'projects_page_template' );
+
+// function profile_page_template($template) {
+//     if(!is_user_logged_in()) return $template;
+  
+//     $current_page = get_queried_object();
+//     if($current_page && $post_name === 'user-profile') { 
+//         $new_template = '';
+//         $current_user = wp_get_current_user();
+//         $user = new WP_User( $current_user->ID);
+
+//         if(in_array('project_manager', $user->roles) || in_array('administrator', $user->roles)){
+//             $new_template = locate_template( array( 'page-profile.php' ) );
+//         }
+//         elseif(in_array('developer', $user->roles)){
+//             $new_template = locate_template( array( 'page-profile-member.php' ) );
+//         }else{
+//             $new_template = locate_template( array( 'front-page.php' ) );
+//         }
+//         if ( '' != $new_template ) {
+//             $template = $new_template;
+//         }
+//     }
+//     return $template;
+// }
+// add_filter( 'template_include', 'profile_page_template' );
+
+function wpb_recently_registered_users() { 
+ 
+    global $wpdb;
+     
+    $wp_users = '<ul class="recently-user">';
+     
+    $usernames = $wpdb->get_results("SELECT user_nicename, user_url, user_email FROM $wpdb->users WHERE user_login != 'admin' ORDER BY ID DESC LIMIT 5");
+     
+    foreach ($usernames as $username) {
+     
+    if (!$username->user_url) :
+     
+    $wp_users .= '<li>' .get_avatar($username->user_email, 45) .$username->user_nicename."</a></li>";
+     
+    else :
+     
+    $wp_users .= '<li>' .get_avatar($username->user_email, 45).'<a href="'.$username->user_url.'">'.$username->user_nicename."</a></li>";
+     
+    endif;
+    }
+    $wp_users .= '</ul>';
+     
+    return $wp_users;
+}
+
+add_filter( 'deprecated_constructor_trigger_error', '__return_false' );
+add_filter( 'deprecated_function_trigger_error', '__return_false' );
+add_filter( 'deprecated_file_trigger_error', '__return_false' );
+add_filter( 'deprecated_argument_trigger_error', '__return_false' );
+add_filter( 'deprecated_hook_trigger_error', '__return_false' );
+
+function my_custom_authenticate_user( WP_User $user  ) {
+    if ( get_user_meta( $user->ID, 'registration_status', true ) === 'pending' ) {
+        remove_action( 'wp_authenticate_user', 'wp_authenticate_username_password', 20 );
+        add_filter( 'wp_authenticate_user', 'my_custom_login_error_message', 20, 3 );
+    }
+
+    return $user;
+}
+add_filter( 'wp_authenticate_user', 'my_custom_authenticate_user', 10, 1 );
+
+function my_custom_login_error_message( $username, $password ) {
+    $error = new WP_Error();
+    $error->add( 'pending', __( 'Your account is pending approval. Please try again later.' ) );
+    return $error;
+}
+
+
+
+/////////////////////////////////////////////////////////////
+function register_rest_api_routes() {
+    register_rest_route( 'projects/v1', 'api', array(
+        'methods'  => 'GET',
+        'callback' => 'get_projects',
+    ) );
+}
+add_action( 'rest_api_init', 'register_rest_api_routes' );
+
+function get_projects( $request ) {
+    $args = array(
+        'post_type'      => 'project',
+        'posts_per_page' => 5,
+        'post_status'    => 'publish',
+    );
+
+    $new_query = new WP_Query( $args );
+    $projects = $new_query->posts;
+
+    $response = array();
+    foreach ( $projects as $project ) {
+        $meta = get_post_meta( $project->ID );
+        $response[] = array(
+            'id' => $project->ID,
+            'title' => $project->post_title,
+            'content' => $project->post_content,
+            'meta' => $meta,
+        );
+    }
+
+    return $response;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+//To restrict pending accounts or pending users from logging in to the Easy-Manage app,
+add_filter( 'wp_authenticate_user', 'easy_manage_restrict_pending_users', 10, 2 );
+function easy_manage_restrict_pending_users( $user, $password ) {
+    $user_status = get_user_meta( $user->ID, 'easy_manage_user_status', true );
+    if ( $user_status === 'pending' ) {
+        // Redirect the user to a custom page or display an error message.
+        wp_redirect( home_url( '/account-pending/' ) );
+        exit;
+    }
+    return $user;
+}
+
+remove_role('subscriber');
+remove_role('contributor');
+remove_role('Author');
+remove_role('editor');
+remove_role('user');
+////////////////////////////////////////////////////////////////////////////////
+//handle routes UserController
+
+// Define hook for user registration
+///add_action( 'wp_ajax_register_user', array( 'UserController', 'register_user' ) );
+
+// Define hook for user login
+//add_action( 'wp_ajax_login_user', array( 'UserController', 'login_user' ) );
+
+// Define hook for user logout
+//add_action( 'wp_ajax_logout_user', array( 'UserController', 'logout_user' ) );
+
+// Define hook for user search
+//add_action( 'wp_ajax_search_user', array( 'UserController', 'search_user' ) );
+
+//handle routes AdminController
+
+// Define hook for user deactivation
+//add_action( 'wp_ajax_deactivate_user', array( 'AdminController', 'deactivate_user' ) );
+
+// Define hook for project creation
+//add_action( 'wp_ajax_create_project', array( 'AdminController', 'create_project' ) );
+
+// Define hook for project assignment
+//add_action( 'wp_ajax_assign_project', array( 'AdminController', 'assign_project' ) );
+
+// Define hook for viewing user locations
+//add_action( 'admin_menu', array( 'AdminController', 'add_location_page' ) );
+
+
+//handle routes ProjectController
+// Define hook for project completion
+//add_action( 'wp_ajax_complete_project', array( 'ProjectController', 'complete_project' ) );
+
+// Define hook for project reassignment
+//add_action( 'wp_ajax_reassign_project', array( 'ProjectController', 'reassign_project' ) );
+
+// Define hook for displaying project details
+//add_shortcode( 'project_details', array( 'ProjectController', 'display_project_details' ) );
+
+
+
+
+
+
+
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

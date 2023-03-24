@@ -99,7 +99,7 @@ Network Visibility</a>
                 style="width: 60px; background-color: #7c4dff; height: 2px"
                 />
             <p>
-              <a href="/EasyM/wp-login.php" class="text-white">Login</a>
+              <a href="/EasyM/hidden/" class="text-white">Login</a>
             </p>
             <p>
               <a href="/EasyM/contact/" class="text-white">Contact Us</a>

@@ -70,6 +70,7 @@ a {
               <li class="list"><a href="/easyM/">HOME</a></li>
               <li class="list"><a href="/easyM/about/">ABOUT</a></li>
               <li class="list"><a href="/easyM/contact/">CONTACT</a></li>
+              <!-- <li class="list"> <a href=""></a> <a href="<?php// echo wp_logout_url( home_url() ); ?>">LOGOUT</a></li> -->
 
             </div>
             

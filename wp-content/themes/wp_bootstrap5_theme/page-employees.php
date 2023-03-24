@@ -1,18 +1,9 @@
 <?php
-
-/**
- * Template Name: Dashboard-url
+/*
+Template Name: Employees List
 */
-
-get_header();?>
-
-
-<?php
-    global $current_user;
-    get_currentuserinfo();
-    $username = $current_user->display_name;
-    echo '<p>Welcome, '.$username.'!</p>';
 ?>
+
 <style>
 		.homepage-heading {
 	width: 100%;
@@ -156,9 +147,9 @@ ul.topnav li.right {float: right;}
     <div class="col-sm-3 col-md-2  sidenav hidden-xs">
   
       <ul class="nav nav-pills ">
-        <li  class="active"><a href="../../easyM/dashboard-url/">Dashboard</a></li>
+        <li ><a href="../../easyM/dashboard-url/">Dashboard</a></li>
         <li><a href="../../easyM/profile/">Profile</a></li>
-        <li><a href="../../easyM/users/">Users</a></li>
+        <li  class="active"><a href="../..easyM/employees/">Users</a></li>
         <li ><a href="#section3">Projects list</a></li>
         <li><a href="#section3">Approve User</a></li>
         <li><a href="#section3">Account Settings</a></li>
@@ -190,6 +181,14 @@ ul.topnav li.right {float: right;}
           border-radius:20px;
           border:1px solid black;
         }
+
+        #well h6 button {
+          background-color:green;
+          color:white;
+          width:100px;
+          border-radius:20px;
+          border:1px solid black;
+        }
         #edit button{
           background-color:#10A54BC9;
           color:white;
@@ -199,6 +198,26 @@ ul.topnav li.right {float: right;}
 
 
         }
+
+        /* .search-results {
+    margin-top: 20px;
+}
+
+.search-results h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.search-results .entry-title {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.search-results .entry-content {
+    font-size: 14px;
+    margin-bottom: 10px;
+} */
+
         
         
  
@@ -206,47 +225,91 @@ ul.topnav li.right {float: right;}
     <div class="col-sm-9 col-md-10">
       <div class="well" id="well" style='background-color: #37362A; color:white;'>
         <h4>Welcome to Easy Manage</h4>
-        <button><h4>Logout</h4></button>
+        <a href="../../easyM/create-project/">
+         <button><h6>Add Project</h6></button>
+        </a>
+        <form method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+  <label for="search-field"><?php _e( 'Search for:', 'textdomain' ); ?></label>
+  <input type="search" name="s" id="search-field" value="<?php echo get_search_query(); ?>" />
+  <button type="submit"><?php _e( 'Search', 'textdomain' ); ?></button>
+</form>
+
+
+
+<a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a>
 
       </div> 
         
-      <table class="table table-striped">
-  <thead>
+<table class="table table-striped">
+<?php
+$user_query = new WP_User_Query( array( 'orderby' => 'user_registered' ) );
+if ( ! empty( $user_query->results ) ) {
+?>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Deactivate</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ( $user_query->results as $user ) { ?>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Project Name</th>
-      <th scope="col">Users</th>
-      <th scope="col">Project Status</th>
-      <th scope="col">Edit Project</th>
-     
+        <td><?php echo $user->ID; ?></td>
+        <td><?php echo $user->display_name; ?></td>
+        <td><?php echo $user->user_email; ?></td>
+        <td><?php echo $user->user_status; ?></td>
+        <td>
+            <?php if ( current_user_can( 'manage_options' ) ) { ?>
+                <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                    <input type="hidden" name="action" value="deactivate_user">
+                    <input type="hidden" name="user_id" value="<?php echo $user->ID; ?>">
+                    <button type="submit"><?php _e( 'Deactivate', 'textdomain' ); ?></button>
+                    <?php wp_nonce_field( 'deactivate_user', 'deactivate_user_nonce' ); ?>
+                </form>
+            <?php } ?>
+        </td>
+
+        <!-- /////////////////////////////////// -->
+        <!-- <?php //if ( have_posts() ) : ?>
+  <ul>
+  <?php //while ( have_posts() ) : the_post(); ?>
+    <li>
+      <h3><a href="<?php //the_permalink(); ?>"><?php //the_title(); ?></a></h3>
+      <p><?php// echo get_post_meta( get_the_ID(), 'email', true ); ?></p>
+      <p><?php //echo get_post_meta( get_the_ID(), 'project', true ); ?></p>
+    </li>
+  <?php //endwhile; ?>
+  </ul>
+<?php //else : ?>
+  <p><?php _e( 'No users found.', 'textdomain' ); ?></p>
+<?php//// endif; ?>
+
     </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mobile Development</td>
-      <td>@mdo</td>
-      <td scope="col">Pending</td>
-      <td scope="col" id="edit"><button>Edit</button></td>
-     
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Wordpress Theme Development</td>
-      <td>@fat</td>
-      <td>Pending</td>
-      <td scope="col"  id="edit"><button>Edit </button></td>
-      
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Website Development</td>
-      <td>@twitter</td>
-      <td>Pending</td>
-      <td scope="col"  id="edit"><button>Edit</button></td>
-      
-    </tr>
-  </tbody>
+<?php } ?> -->
+
+
+
+
+
+
+
+
+    </tbody>
+</table>
+<?php
+} else {
+    echo 'No users found.';
+}
+
+
+
+?>
+
+  
 </table>
       </div>
     </div>
@@ -262,7 +325,3 @@ ul.topnav li.right {float: right;}
 ?>
 
 
-
-
-
-<?php //et_footer();?>
