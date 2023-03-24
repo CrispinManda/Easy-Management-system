@@ -15,12 +15,11 @@ class Roles{
     public function add_developer_role() {
         $capabilities = array(
             'read'                      => true,
-            'edit_posts'                => true,
-            'delete_posts'              => true,
-            'upload_files'              => true,
-            'publish_posts'             => true,
-            'edit_published_posts'      => true,
-            'delete_published_posts'    => true,
+            'view_project_assignments'                => true,
+            'complete_project-assignments'              => true,
+            'receive_project_emails'              => true,
+            'view_user_maps'             => true,
+
         );
     
         // Add the custom role with the capabilities of an author
@@ -30,21 +29,13 @@ class Roles{
     // Define the custom role and its capabilities
     function add_project_manager_role() {
         $capabilities = array(
-            'read' => true,
-            'edit_posts' => true,
-            'delete_posts' => true,
-            'upload_files' => true,
-            'publish_posts' => true,
-            'edit_published_posts' => true,
-            'delete_published_posts' => true,
-            'edit_pages' => true,
-            'edit_others_posts' => true,
-            'edit_others_pages' => true,
-            'delete_others_posts' => true,
-            'delete_others_pages' => true,
-            'manage_categories' => true,
-            'moderate_comments' => true,
-            'manage_links' => true,
+            'manage_users' => true,
+            'create_users' => true,
+            'edit_users' => true,
+            'delete_users' => true,
+            'manage_options' => true,
+            'view_user_maps' => true,
+
         );
 
         // Add the custom role with the capabilities of an editor

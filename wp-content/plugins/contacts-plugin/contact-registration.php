@@ -7,10 +7,10 @@
    /*
 
 Plugin Name: Contact-registration
-Plugin URI:
+Plugin URI:https://github.com/Kennedy-karuri/Easy-manage.git
 Author: Kennedy Karuri
-Author URI: 
-Description: This is a custom plugin that collect contact information for wordpress cohort8 project.
+Author URI: https://github.com/Kennedy-karuri/Easy-manage.git
+Description: This is a custom plugin that collect contact information for easy-manage theme.
 Version: 1.0
 Requires at least: 5.0
 Tested up to: 5.4
@@ -53,9 +53,10 @@ class ContactReg{
        
 
         $contact_details = "CREATE TABLE $table_name(
-            fullname text NOT NULL,
+            firstname text NOT NULL,
+            secondname text NOT NULL,
             email varchar(35) NOT NULL,
-            telephone text NOT NULL,
+            telephone integer NOT NULL,
             message text NOT NULL
         );";
 
@@ -68,7 +69,8 @@ class ContactReg{
     function pass_data_to_db(){
         if (isset($_POST['submitbtn'])){
             $data = array(
-                'fullname'=>$_POST['fullname'],
+                'firstname'=>$_POST['firstname'],
+                'secondname'=>$_POST['secondname'],
                 'email'=>$_POST['email'],
                 'telephone'=>$_POST['telephone'],
                 'message'=>$_POST['message']
