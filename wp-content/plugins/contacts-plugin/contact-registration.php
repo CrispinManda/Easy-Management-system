@@ -7,8 +7,8 @@
    /*
 
 Plugin Name: Contact-registration
-Plugin URI:https://github.com/Kennedy-karuri/Easy-manage.git
-Author: Kennedy Karuri
+Plugin URI:https://github
+Author: cris
 Author URI: https://github.com/Kennedy-karuri/Easy-manage.git
 Description: This is a custom plugin that collect contact information for easy-manage theme.
 Version: 1.0
